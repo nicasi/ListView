@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListView
 {
@@ -24,22 +25,33 @@ namespace ListView
     {
         private static MusicContext _ctx = new MusicContext();
 
-        private static string[] adjectives = { "Red", "Big", "Oval", "Somber", "Blue", "Pink", "Humongous", "Terrifying" };
-        private static string[] nouns = { "Sandal", "Sky", "Sun", "Boiler", "Loneliness", "Happiness", "Lobster", "Potato" };
+        private static string[] adjectives = { "Red", "Big", "Oval", "Somber", "Blue", "Pink", "Humongous", "Terrifying", "Mostly Harmless" };
+        private static string[] nouns = { "Sandals", "Sky", "Suns", "Boilers", "Loneliness", "Happiness", "Lobster", "Potato", "Dandelions", "Cats", "Cars", "Shoes", "Planets" };
         private static ObservableCollection<Track> tracks; 
         public MainWindow()
         {
             InitializeComponent();
-            _ctx.Artists.ToList();
+            //_ctx.Artists.ToList();
 
-            tracks = new ObservableCollection<Track>(_ctx.Tracks);
+            tracks = new ObservableCollection<Track>(_ctx.Tracks.Include(track => track.Artist));
             lv_tracks.ItemsSource = tracks;
         }
 
         private void btn_create_Click(object sender, RoutedEventArgs e)
         {
             Random r = new Random();
-            Track t = new Track() { Name = $"The {adjectives[r.Next(adjectives.Length - 1)]} {nouns[r.Next(nouns.Length - 1)]}", Artist = _ctx.Artists.ToList()[r.Next(_ctx.Artists.Count())] };
+
+            string prefix = ""; 
+            
+            switch (new Random().Next(4))
+            {
+                case 0: break;
+                case 1: prefix = "The "; break;
+                case 2: prefix = "Some "; break;
+                case 3: prefix = "Several Species of "; break;
+            }
+
+            Track t = new Track($"{prefix}{adjectives[r.Next(adjectives.Length)]} {nouns[r.Next(nouns.Length)]}", new Random().Next(400),  _ctx.Artists.ToList()[r.Next(_ctx.Artists.Count())] as Artist);
             _ctx.Tracks.Add(t);
             _ctx.SaveChanges();
             tracks.Add(t);
@@ -57,7 +69,17 @@ namespace ListView
 
             Track t = lv_tracks.SelectedItem as Track;
 
-            t.Name = $"The {adjectives[r.Next(adjectives.Length - 1)]} {nouns[r.Next(nouns.Length - 1)]}";
+            string prefix = ""; 
+
+            switch (new Random().Next(4))
+            {
+                case 0: break;
+                case 1: prefix = "The "; break;
+                case 2: prefix = "Some "; break;
+                case 3: prefix = "Several Species of "; break;
+            }
+
+            t.Name = $"{prefix}{adjectives[r.Next(adjectives.Length)]} {nouns[r.Next(nouns.Length)]}";
             _ctx.SaveChanges();
             lv_tracks.Items.Refresh();
         }

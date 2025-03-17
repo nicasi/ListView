@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DataGrid_SqLite;
 
-namespace DataGrid_SqLite;
+namespace ListView;
 
 public partial class Artist
 {

@@ -5,9 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ListView"
         mc:Ignorable="d"
-        Title="Basic Listview Demo" Height="450" Width="600"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        Title="Basic Listview Demo" Height="450" Width="600">
     
     <Grid>
         <Grid.RowDefinitions>
